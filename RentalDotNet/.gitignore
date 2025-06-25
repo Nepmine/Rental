@@ -1,0 +1,50 @@
+# Ignore Visual Studio temporary files, build results, and
+# user-specific files
+
+## Build results
+bin/
+obj/
+
+## VS user settings
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet packages
+packages/
+*.nupkg
+# Uncomment the next line if you do not want to commit package restore results
+# !packages/repositories.config
+
+## Web Publish
+*.Publish.xml
+
+## IIS Express
+.vs/
+*.vspscc
+*.vssscc
+applicationhost.config
+
+## Others
+*.dbmdl
+*.log
+*.tlog
+*.tmp
+*.bak
+*.cache
+*.pdb
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Rider
+.idea/
+
+# OS generated
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
