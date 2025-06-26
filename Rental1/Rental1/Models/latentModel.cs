@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Rental1.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Rental1.Models
 {
@@ -12,7 +13,11 @@ namespace Rental1.Models
 
         public string? Name { get; set; }
 
+        [Required]
         public string Email { get; set; } = null!;
+
+        [Required]
+        public string Password { get; set; } = null!;
 
         public string? MobileNo { get; set; }
 
