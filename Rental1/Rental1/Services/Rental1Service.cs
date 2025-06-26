@@ -12,7 +12,7 @@ namespace Rental1.Services
         {
             var mongoClient = new MongoClient(RentalDatabaseSetting.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(RentalDatabaseSetting.Value.DatabaseName);
-            _userCollection = mongoDatabase.GetCollection<userModel>(RentalDatabaseSetting.Value.CollectionName);
+            _userCollection = mongoDatabase.GetCollection<userModel>(RentalDatabaseSetting.Value.LatentCollectionName);
         }
 
         public async Task<List<userModel>> GetAllEntries() =>
