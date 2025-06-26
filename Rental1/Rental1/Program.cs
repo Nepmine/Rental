@@ -16,6 +16,7 @@ builder.Services.AddSingleton<Rental1Service>();
 builder.Services.AddScoped<LatentService>();
 
 builder.Services.AddSingleton<OwnerService>();
+builder.Services.AddSingleton<PropertyService>();
 
 
 
