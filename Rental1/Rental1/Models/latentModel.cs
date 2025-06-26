@@ -18,7 +18,7 @@ namespace Rental1.Models
 
         public string? Description { get; set; }
 
-        public List<RequestModel> Requests { get; set; } = new();
+        public List<RequestModel>? Requests { get; set; } = new();
 
         public List<String>? Favourites { get; set; }
     }
