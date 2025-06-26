@@ -12,7 +12,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<DatabaseSetting>(builder.Configuration.GetSection("Rental1Database"));
 
-builder.Services.AddSingleton<Rental1Service>();
+//builder.Services.AddSingleton<Rental1Service>();
+
+builder.Services.AddSingleton<OwnerService>();
+
 
 
 var app = builder.Build();
