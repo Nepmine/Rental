@@ -19,11 +19,7 @@ namespace Rental1.Models
 
         public string? Description { get; set; }
 
-        //[BsonElement("requests")]
-        //public List<BsonDocument> Requests { get; set; } = new();
-
-        [BsonElement("requests")]
-        public List<RequestModel> Requests { get; set; } = new();
+        public List<RequestModel>? Requests { get; set; } = new();
 
         public List<String>? Favourites { get; set; }
     }
