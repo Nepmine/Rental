@@ -7,5 +7,6 @@
         public string LatentCollectionName { get; set; } = "Latent";
 
         public string OwnerCollectionName { get; set; } = "Owner";
+        public string PropertyCollectionName { get; set; } = "Property";
     }
 }
