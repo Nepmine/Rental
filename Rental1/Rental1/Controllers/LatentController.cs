@@ -15,14 +15,16 @@ namespace Rental1.Controllers
             _latentService = latentService;
         }
 
-        [HttpGet]
-        public async Task<List<latentModel>> GetAll() => await _latentService.GetAllEntries();
-
-        [HttpPost]
-        public async Task<string> Post(latentModel newLatent)
+        [HttpPost("LatentRegister")]
+        public async Task<string> LatentRegister(latentModel newLatent)
         {
-            await _latentService.CreateEntry(newLatent);
-            return "Hello world !";
+            return await _latentService.LatentRegister(newLatent);
+        }
+
+        [HttpPost("LatentLogin")]
+        public async Task<string> LatentLogin(string email, string password)
+        {
+            return await _latentService.LatentLogin(email, password);
         }
     }
 }

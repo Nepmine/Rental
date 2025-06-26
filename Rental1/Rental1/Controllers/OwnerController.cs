@@ -6,30 +6,28 @@ using Rental1.Services;
 namespace Rental1.Controllers
 {
     [ApiController]
-    [Route("owner/[controller]")]
+    [Route("owner/")]
     public class OwnerController : Controller
     {
             private readonly OwnerService _OwnerService;
-
-
         public OwnerController(OwnerService ownerService)
         {
             _OwnerService = ownerService;
         }
 
-        [HttpGet]
-        public async Task<List<OwnerModel>> allOwners()
+//     ---------------------   ALL API's   -----------------------------
+
+
+        [HttpPost("OwnerRegister")]
+        public async Task<string> OwnerRegister(OwnerModel newOwner)
         {
-            return await _OwnerService.getAllOwners();
+            return await _OwnerService.OwnerRegister(newOwner);
         }
 
-        //public async Task<List<latentModel>> GetAll() => await _latentService.GetAllEntries();
-
-        [HttpPost]
-        public string Index(OwnerModel newOwner)
+        [HttpPost("OwnerLogin")]
+        public async Task<string> OwnerLogin(string email, string password)
         {
-            _OwnerService.CreateOwner(newOwner);
-            return "Hello there !";
+            return await _OwnerService.OwnerLogin(email, password);
         }
     }
 }

@@ -4,7 +4,7 @@
     {
         public string ConnectionString { get; set; } = null!;
         public string DatabaseName { get; set; } = null!;
-        public string LatentCollectionName { get; set; } = "Latent1";
+        public string LatentCollectionName { get; set; } = "Latent";
 
         public string OwnerCollectionName { get; set; } = "Owner";
     }
