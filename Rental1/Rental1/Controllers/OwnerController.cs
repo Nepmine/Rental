@@ -15,8 +15,13 @@ namespace Rental1.Controllers
             _OwnerService = ownerService;
         }
 
-//     ---------------------   ALL API's   -----------------------------
+        //     ---------------------   ALL API's   -----------------------------
 
+        [HttpGet("Profile")]
+        public async Task<ProfileReturnDTO> getProfile(string id)
+        {
+            return await _OwnerService.getProfile(id);
+        }
 
         [HttpPost("OwnerRegister")]
         public async Task<string> OwnerRegister(OwnerModel newOwner)
