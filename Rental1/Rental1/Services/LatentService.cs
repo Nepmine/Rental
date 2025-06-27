@@ -100,5 +100,29 @@ namespace Rental1.Services
 
             return "Liked ;)";
         }
+
+
+
+
+
+    public async Task<List<PropertyModel>> AllFavourates(string latentId)
+        {
+            latentModel Latent = await _latentCollection.Find(x => x.Id == latentId).FirstOrDefaultAsync();
+
+
+            if (Latent == null)
+            {
+                throw new KeyNotFoundException("Latent not found");
+            }
+            if (Latent.Favourites == null)
+            {
+                return [];
+            }
+
+            return await _propertyService.AllFavourateProperties(Latent.Favourites);
+        }
     }
+
+
+
 }
