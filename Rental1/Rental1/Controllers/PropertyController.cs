@@ -27,5 +27,12 @@ namespace Rental1.Controllers
             await _propertyService.CreateEntry(newLatent);
             return "Property Details Added !";
         }
+
+        [HttpPut("UpdateProperty")]
+        public async Task<string> UpdateProperty(PropertyModel property)
+        {
+            await _propertyService.UpdateProperty(property);
+            return "Property Updated !";
+        }
     }
 }
