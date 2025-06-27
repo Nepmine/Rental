@@ -15,7 +15,10 @@ namespace Rental1.Controllers
             _propertyService = propertyService;
         }
 
-        [HttpGet("getAll")]
+        [HttpGet("getPropertyById")]
+        public async Task<PropertyModel> getPropertyById(string propertyId) => await _propertyService.getPropertyById(propertyId);
+
+        [HttpGet("getAllProperties")]
         public async Task<List<PropertyModel>> GetAll() => await _propertyService.GetAllEntries();
 
         [HttpPost]

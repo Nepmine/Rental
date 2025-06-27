@@ -35,18 +35,17 @@ namespace Rental1.Controllers
             return await _latentService.LatentLogin(email, password);
         }
 
-        [HttpPost("Favourate")]
+        [HttpPost("AddFavourate")]
         public async Task<string> AddFavourate(string propertyId, string latentId)
         {
             return await _latentService.AddFavourate(propertyId, latentId);
         }
 
-        //[HttpGet("Favourate")]
-        //public async Task<string> LatentLogin(string email, string password)
-        //{
-        //    return await _latentService.LatentLogin(email, password);
-        //}
-
+        [HttpPost("AllFavourates")]
+        public async Task<List<PropertyModel>> AllFavourates(string latentId)
+        {
+            return await _latentService.AllFavourates(latentId);
+        }
 
     }
 }
