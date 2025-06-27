@@ -51,5 +51,11 @@ namespace Rental1.Services
             return await _propertyCollection.Find(filter).ToListAsync();
 
         }
+
+
+        public async Task UpdateProperty(PropertyModel property)
+        {
+            await _propertyCollection.ReplaceOneAsync(x =>x.Id==property.Id, property);
+        }
     }
 }
