@@ -28,6 +28,15 @@ namespace Rental1.Controllers
             return "Property Details Added !";
         }
 
+        [HttpPut("UpdatePropertyStatus")]
+        public async Task<string> UpdatePropertyStatus(string propertyId, string status)
+        {
+            await _propertyService.UpdatePropertyStatus(propertyId, status);
+            return "Property Status updated !";
+        }
+
+
+
         [HttpPut("UpdateProperty")]
         public async Task<string> UpdateProperty(PropertyModel property)
         {
