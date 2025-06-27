@@ -20,5 +20,18 @@ namespace Rental1.Services
 
         public async Task CreateEntry(PropertyModel newProp) =>
          await _propertyCollection.InsertOneAsync(newProp);
+
+
+
+        //   --------------- External Helper Functions --------------------
+
+            // incriment the count of likes of property by 1
+        public async Task AddPropertyLike(string propertyId)
+        {
+            PropertyModel Property = await _propertyCollection.Find(x => x.Id == propertyId).FirstOrDefaultAsync();
+            ++Property.Likes;
+            await _propertyCollection.ReplaceOneAsync(x => x.Id == propertyId, Property);
+
+        }
     }
 }

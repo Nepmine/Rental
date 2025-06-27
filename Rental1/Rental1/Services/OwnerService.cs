@@ -15,12 +15,23 @@ namespace Rental1.Services
             _OwnerCollection = mongoDatabase.GetCollection<OwnerModel>(RentalDatabaseSetting.Value.OwnerCollectionName);
         }
 
-        public async Task<List<OwnerModel>> getAllOwners() =>
-        await _OwnerCollection.Find(_ => true).ToListAsync();
+        public async Task<ProfileReturnDTO> getProfile(string id)
+        {
+        OwnerModel Owner=await _OwnerCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            if (Owner == null)
+            {
+                throw new KeyNotFoundException("Owner not found");
+            }
 
-        public async Task<List<OwnerModel>> getOwner() =>
-        await _OwnerCollection.Find(_ => true).ToListAsync();
+            return new ProfileReturnDTO
+            {
+                Name = Owner.Name,
+                Email = Owner.Email,
+                Mobile = Owner.Mobile
+            };
+        }
 
+        
         public async Task<string> OwnerRegister(OwnerModel newOwner)
         {
             try

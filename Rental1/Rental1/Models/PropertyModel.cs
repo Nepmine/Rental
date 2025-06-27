@@ -26,6 +26,7 @@ namespace Rental1.Models
 
         public string? OwnerId { get; set; }
 
+        // like family only, married, no bachelors, no dead
         public List<string> Preferences { get; set; } = new(["Any"]);
 
         public List<Photos>? photos { get; set; } = new();
@@ -39,6 +40,9 @@ namespace Rental1.Models
         public string title { get; set; } = null!;
 
         public string? photoDesc { get; set; } // I have a gijer in my bathroom for you :)
+
+        [Required]
+        public string profilePhoto { get; set; } = null!;
 
         [Required]
         public List<string> photoPath { get; set; } =new();

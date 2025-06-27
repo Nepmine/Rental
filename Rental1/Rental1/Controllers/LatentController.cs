@@ -15,6 +15,14 @@ namespace Rental1.Controllers
             _latentService = latentService;
         }
 
+
+        [HttpGet("Profile")]
+        public async Task<ProfileReturnDTO> getProfile(string id)
+        {
+            return await _latentService.getProfile(id);
+        }
+
+
         [HttpPost("LatentRegister")]
         public async Task<string> LatentRegister(latentModel newLatent)
         {
@@ -26,5 +34,19 @@ namespace Rental1.Controllers
         {
             return await _latentService.LatentLogin(email, password);
         }
+
+        [HttpPost("Favourate")]
+        public async Task<string> AddFavourate(string propertyId, string latentId)
+        {
+            return await _latentService.AddFavourate(propertyId, latentId);
+        }
+
+        //[HttpGet("Favourate")]
+        //public async Task<string> LatentLogin(string email, string password)
+        //{
+        //    return await _latentService.LatentLogin(email, password);
+        //}
+
+
     }
 }
