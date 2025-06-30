@@ -1,5 +1,8 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Rental1.Models;
 using Rental1.Services;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
