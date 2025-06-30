@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using Rental1.Models;
 using Rental1.Services;
+using System.Data;
 
 namespace Rental1.Controllers
 {
@@ -34,5 +36,18 @@ namespace Rental1.Controllers
             await _propertyService.UpdateProperty(property);
             return "Property Updated !";
         }
+
+        //location controller
+        [HttpGet("searchByLocation")]
+        public async Task<NominatimResult> SearchByLocation(
+        [FromQuery] string location,
+        [FromQuery] double distanceInMeters = 5000)
+        {
+            // 1. Geocode the location name
+            return await _propertyService.GeocodeLocation(location);
+        }
+
+
+
     }
 }
