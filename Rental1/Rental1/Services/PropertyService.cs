@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using Rental1.Models;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 
 namespace Rental1.Services
@@ -34,14 +35,14 @@ namespace Rental1.Services
         public async Task<List<PropertyModel>> GetAllEntries() =>
         await _propertyCollection.Find(_ => true).ToListAsync();
 
-        public async Task CreateEntry(PropertyModel newProp) =>
-         await _propertyCollection.InsertOneAsync(newProp);
-
-
+        public async Task CreateEntry(PropertyModel property)
+        {
+            await _propertyCollection.InsertOneAsync(property);
+        }
 
         //   --------------- External Helper Functions --------------------
 
-            // incriment the count of likes of property by 1
+        // incriment the count of likes of property by 1
         public async Task AddPropertyLike(string propertyId)
         {
             PropertyModel Property = await _propertyCollection.Find(x => x.Id == propertyId).FirstOrDefaultAsync();
@@ -74,68 +75,44 @@ namespace Rental1.Services
         }
 
         //location logic 
-        public async Task<NominatimResult> GeocodeLocation(string locationName)
+        //method to return the cords of the entered location
+        public async Task<NominatimResult> changePlaceToCords(string locationName)
         {
             using var httpClient = new HttpClient();
 
-            // Build URL
             var url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(locationName)}&format=json&limit=1";
 
-            // Nominatim requires a User-Agent header
             httpClient.DefaultRequestHeaders.Add("User-Agent", "YourRentalApp/1.0");
 
-            // Call API
             var json = await httpClient.GetStringAsync(url);
-
-            // Deserialize JSON array
-            //var json = System.Text.Json.JsonSerializer.Deserialize<List<NominatimResult>>(response);
 
             JsonDocument doc = JsonDocument.Parse(json);
             JsonElement root = doc.RootElement;
 
-            // Since it's an array, get the first element
+            if (root.GetArrayLength() == 0)
+            {
+                throw new InvalidOperationException($"No geocoding results found for address: '{locationName}'.");
+            }
+
             JsonElement first = root[0];
 
             string lati = first.GetProperty("lat").GetString();
             string loni = first.GetProperty("lon").GetString();
+
             NominatimResult cords = new NominatimResult();
-            cords.Lat = lati;
-            cords.Lon = loni;
 
-
+            cords.Lat = double.Parse(lati, System.Globalization.CultureInfo.InvariantCulture);
+            cords.Lon = double.Parse(loni, System.Globalization.CultureInfo.InvariantCulture);
 
             return cords;
-
-            //var locations = JsonSerializer.Deserialize<List<NominatimResult>>(response);
-            //return results;
-            //if (results)
-            //{
-
-            //}
-            return null;
-            //if (results != null && results.Any())
-            //{
-            //    var latString = results[0].Lat;
-            //    var lonString = results[0].Lon;
-
-            //    if (!string.IsNullOrWhiteSpace(latString) && !string.IsNullOrWhiteSpace(lonString))
-            //    {
-            //        if (double.TryParse(latString, out var lat) && double.TryParse(lonString, out var lon))
-            //        {
-            //            return (lat, lon);
-            //        }
-            //    }
-            //}
-
-            //// Not found or invalid
-            //return null;
         }
 
 
+        // Searching for properties near the coords(entered address)
         public async Task<List<PropertyModel>> SearchPropertiesNear(
-        double longitude,
-        double latitude,
-        double distanceInMeters)
+            double longitude,
+            double latitude,
+            double distanceInMeters)
         {
             var point = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
                 new GeoJson2DGeographicCoordinates(longitude, latitude)
