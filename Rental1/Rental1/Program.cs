@@ -1,14 +1,14 @@
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using Rental1.Models;
-using Rental1.Services;
-using System.Data;
-
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Rental1.Models;
+using Rental1.Services;
+using StackExchange.Redis;
 using System;
+using System.Data;
 
 
 
@@ -28,6 +28,9 @@ builder.Services.AddScoped<LatentService>();
 
 builder.Services.AddSingleton<OwnerService>();
 builder.Services.AddSingleton<PropertyService>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6060"));
+builder.Services.AddHttpClient();
 
 
 
