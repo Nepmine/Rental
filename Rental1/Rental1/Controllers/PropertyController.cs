@@ -57,20 +57,20 @@ namespace Rental1.Controllers
 
         //location controller
         [HttpGet("searchByLocation")]
-        public async Task<List<PropertyModel>> SearchByLocation(
+        public async Task<List<PropertyReturnModel>> SearchByLocation(
         [FromQuery] string location,
         [FromQuery] double distanceInMeters = 5000)
         {
+            List<PropertyReturnModel> redisAnswer =await _propertyService.checkCache(location);  // we were here, check the cache making a function returning properties or null !
             //get cords
+            if(redisAnswer != null)
+            {
+                return redisAnswer;
+            }
             var coords = await _propertyService.changePlaceToCords(location);
 
             //searching props near to cords
-            var properties = await _propertyService.SearchPropertiesNear(
-                (double)coords.Lon,
-                (double)coords.Lat,
-                distanceInMeters);
-
-            return properties;
+            return await _propertyService.SearchPropertiesNear( (double)coords.Lon, (double)coords.Lat,distanceInMeters , location);
         }
 
     }

@@ -37,6 +37,25 @@ namespace Rental1.Models
         
     }
 
+    public class PropertyReturnModel
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public string Status { get; set; } = "Available";
+
+        public PriceDetails? Price { get; set; } = new();
+
+        public string? Address { get; set; }
+
+        public int Likes { get; set; } = 0;
+
+        public List<Photos>? photos { get; set; } = new();
+    }
+
     public class Photos
     {
         [Required]
