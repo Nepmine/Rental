@@ -47,5 +47,19 @@ namespace Rental1.Controllers
             return await _latentService.AllFavourates(latentId);
         }
 
+        [HttpPost("RequestForProperty")]
+        public async Task<string> RequestForProperty(RequestModel newRequest)
+        {
+            await _latentService.RequestForProperty(newRequest);
+            return "Request Submitted !";
+        }
+
+        [HttpGet("GetAllRequests")]
+        public async Task<List<PropertyModel>> GetAllRequests(string latentId)
+        {
+            return await _latentService.GetAllRequests(latentId);
+       
+        }
+
     }
 }
