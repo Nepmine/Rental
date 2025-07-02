@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using Rental1.Models;
 using Rental1.Services;
+using System.Net;
 
 namespace Rental1.Services
 {
@@ -9,14 +10,18 @@ namespace Rental1.Services
     {
         public readonly IMongoCollection<latentModel> _latentCollection;
         private PropertyService _propertyService;
+        private OwnerService _ownerService;
 
-        public LatentService(IOptions<DatabaseSetting> RentalDatabaseSetting, PropertyService propertyService)
+
+        public LatentService(IOptions<DatabaseSetting> RentalDatabaseSetting, PropertyService propertyService, OwnerService ownerService)
         {
             var mongoClient = new MongoClient(RentalDatabaseSetting.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(RentalDatabaseSetting.Value.DatabaseName);
             _latentCollection = mongoDatabase.GetCollection<latentModel>(RentalDatabaseSetting.Value.LatentCollectionName);
 
             _propertyService = propertyService;
+            _ownerService = ownerService;
+
         }
 
 
@@ -121,8 +126,62 @@ namespace Rental1.Services
 
             return await _propertyService.AllFavourateProperties(Latent.Favourites);
         }
+
+
+    public async Task RequestForProperty(RequestModel newRequest)
+        {
+            latentModel Latent = await _latentCollection.Find(x => x.Id == newRequest.LatentId).FirstOrDefaultAsync();
+
+
+            if (Latent == null)
+            {
+                throw new KeyNotFoundException("Latent not found");
+            }
+            if (Latent.Requests == null)
+            {
+                List<RequestModel> req = new List<RequestModel>();
+                Latent.Requests= req;
+            }
+                Latent.Requests.Add(newRequest);
+            await _latentCollection.ReplaceOneAsync(x => x.Id == Latent.Id, Latent);
+
+
+            await _ownerService.SendPropertyRequest(newRequest);
+        }
+
+
+
+
+        public async Task<List<PropertyModel>> GetAllRequests(string latentId)
+        {
+            // fetch request list
+            // extract propertyId from each
+            // extract property details from that propertyid calling AllFavourateProperties in propertyService
+
+            latentModel Latent = await _latentCollection.Find(x => x.Id == latentId).FirstOrDefaultAsync();
+
+
+            if (Latent == null)
+            {
+                throw new KeyNotFoundException("Latent not found");
+            }
+            if (Latent.Requests == null)
+            {
+                return null;
+            }
+            List<string> requestPropertiesList = new List<string>();
+            foreach (var item in Latent.Requests)
+            {
+                requestPropertiesList.Add(item.PropertyId);
+            }
+            return await _propertyService.AllFavourateProperties(requestPropertiesList);
+
+        }
+
+
+
+
+
     }
-
-
 
 }

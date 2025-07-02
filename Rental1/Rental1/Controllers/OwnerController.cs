@@ -34,5 +34,13 @@ namespace Rental1.Controllers
         {
             return await _OwnerService.OwnerLogin(email, password);
         }
+
+
+        [HttpGet("GetAllRequests")]
+        public async Task<List<PropertyModel>> GetAllRequests(string ownerId)
+        {
+            return await _OwnerService.GetAllRequests(ownerId);
+
+        }
     }
 }

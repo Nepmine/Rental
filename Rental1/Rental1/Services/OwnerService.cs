@@ -7,12 +7,14 @@ namespace Rental1.Services
     public class OwnerService
     {
         public readonly IMongoCollection<OwnerModel> _OwnerCollection;
+        private PropertyService _propertyService;
 
-        public OwnerService(IOptions<DatabaseSetting> RentalDatabaseSetting)
+        public OwnerService(IOptions<DatabaseSetting> RentalDatabaseSetting, PropertyService propertyService)
         {
             var mongoClient = new MongoClient(RentalDatabaseSetting.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(RentalDatabaseSetting.Value.DatabaseName);
             _OwnerCollection = mongoDatabase.GetCollection<OwnerModel>(RentalDatabaseSetting.Value.OwnerCollectionName);
+            _propertyService = propertyService;
         }
 
         public async Task<ProfileReturnDTO> getProfile(string id)
@@ -65,5 +67,78 @@ namespace Rental1.Services
                 return "Error while Registering Owner /n Error: " + ex.Message;
             }
         }
+
+
+
+
+
+
+        // ----------------------------------------- Extra -----------------------------------------
+
+        public async Task<string> SendPropertyRequest(string email, string password)
+        {
+            try
+            {
+                // convert the password to hash before checking ..
+                OwnerModel Owner = await _OwnerCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
+                if (Owner == null || Owner.Password != password)
+                {
+                    return "Error, Email or password Invalid !";
+                }
+
+                return "Logged in Successfully !";
+            }
+            catch (Exception ex)
+            {
+                return "Error while Registering Owner /n Error: " + ex.Message;
+            }
+        }
+
+        public async Task SendPropertyRequest(RequestModel newRequest)
+        {
+            OwnerModel Owner = await _OwnerCollection.Find(x => x.Id == newRequest.OwnerId).FirstOrDefaultAsync();
+
+
+            if (Owner == null)
+            {
+                throw new KeyNotFoundException("Owner not found");
+            }
+            if (Owner.Requests == null)
+            {
+                List<RequestModel> req = new List<RequestModel>();
+                Owner.Requests = req;
+            }
+            Owner.Requests.Add(newRequest);
+            await _OwnerCollection.ReplaceOneAsync(x => x.Id == Owner.Id, Owner);
+        }
+
+
+
+        public async Task<List<PropertyModel>> GetAllRequests(string ownerId)
+        {
+            // fetch request list
+            // extract propertyId from each
+            // extract property details from that propertyid calling AllFavourateProperties in propertyService
+
+            OwnerModel Owner = await _OwnerCollection.Find(x => x.Id == ownerId).FirstOrDefaultAsync();
+
+
+            if (Owner == null)
+            {
+                throw new KeyNotFoundException("Owner not found");
+            }
+            if (Owner.Requests == null)
+            {
+                return null;
+            }
+            List<string> requestPropertiesList = new List<string>();
+            foreach (var item in Owner.Requests)
+            {
+                requestPropertiesList.Add(item.PropertyId);
+            }
+            return await _propertyService.AllFavourateProperties(requestPropertiesList);
+
+        }
     }
 }
+
