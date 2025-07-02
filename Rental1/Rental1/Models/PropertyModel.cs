@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rental1.Models
@@ -18,7 +19,9 @@ namespace Rental1.Models
 
         public PriceDetails? Price { get; set; } = new();
 
-        public Location? location { get; set; } = new();
+        public GeoJsonPoint<GeoJson2DGeographicCoordinates>? Location { get; set; }
+
+        public string? Address { get; set; }
 
         public List<Feature>? features { get; set; } = new();
 
@@ -39,22 +42,13 @@ namespace Rental1.Models
         [Required]
         public string title { get; set; } = null!;
 
-        public string? photoDesc { get; set; } // I have a gijer in my bathroom for you :)
+        public string? photoDesc { get; set; }
 
         [Required]
         public string profilePhoto { get; set; } = null!;
 
         [Required]
-        public List<string> photoPath { get; set; } =new();
-    }
-
-    public class Location
-    {
-        [Required]
-        public Double longitude { get; set; }
-
-        [Required]
-        public Double latitude { get; set; }
+        public List<string> photoPath { get; set; } = new();
     }
 
     public class PriceDetails

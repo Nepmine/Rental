@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Rental1.Models;
 using Rental1.Services;
+using System.Data;
 
 namespace Rental1.Controllers
 {
@@ -21,12 +24,21 @@ namespace Rental1.Controllers
         [HttpGet("getAllProperties")]
         public async Task<List<PropertyModel>> GetAll() => await _propertyService.GetAllEntries();
 
-        [HttpPost]
-        public async Task<string> Post(PropertyModel newLatent)
+        //here while adding property converting the address to cords 
+        [HttpPost("addProperty")]
+        public async Task<string> CreateProperty([FromBody] PropertyModel input)
         {
-            await _propertyService.CreateEntry(newLatent);
-            return "Property Details Added !";
+            var coords = await _propertyService.changePlaceToCords(input.Address);
+
+            input.Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                new GeoJson2DGeographicCoordinates((double)coords.Lon, (double)coords.Lat)
+            );
+
+            await _propertyService.CreateEntry(input);
+
+            return "Property added successfully!";
         }
+
 
         [HttpPut("UpdatePropertyStatus")]
         public async Task<string> UpdatePropertyStatus(string propertyId, string status)
@@ -36,12 +48,30 @@ namespace Rental1.Controllers
         }
 
 
-
         [HttpPut("UpdateProperty")]
         public async Task<string> UpdateProperty(PropertyModel property)
         {
             await _propertyService.UpdateProperty(property);
             return "Property Updated !";
         }
+
+        //location controller
+        [HttpGet("searchByLocation")]
+        public async Task<List<PropertyModel>> SearchByLocation(
+        [FromQuery] string location,
+        [FromQuery] double distanceInMeters = 5000)
+        {
+            //get cords
+            var coords = await _propertyService.changePlaceToCords(location);
+
+            //searching props near to cords
+            var properties = await _propertyService.SearchPropertiesNear(
+                (double)coords.Lon,
+                (double)coords.Lat,
+                distanceInMeters);
+
+            return properties;
+        }
+
     }
 }
