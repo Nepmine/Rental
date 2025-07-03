@@ -139,6 +139,27 @@ namespace Rental1.Services
             return await _propertyService.AllFavourateProperties(requestPropertiesList);
 
         }
+
+            // fetch request list
+            // extract propertyId from each
+            // extract property details from that propertyid calling AllFavourateProperties in propertyService
+        public async Task<List<PropertyModel>> myAllProperties(string ownerId)
+        {
+
+            OwnerModel Owner = await _OwnerCollection.Find(x => x.Id == ownerId).FirstOrDefaultAsync();
+
+
+            if (Owner == null)
+            {
+                throw new KeyNotFoundException("Owner not found");
+            }
+            if (Owner.Properties == null)
+            {
+                return null;
+            }
+            return await _propertyService.AllFavourateProperties(Owner.Properties);
+
+        }
     }
 }
 

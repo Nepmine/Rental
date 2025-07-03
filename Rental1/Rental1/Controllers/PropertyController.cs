@@ -59,7 +59,7 @@ namespace Rental1.Controllers
         [HttpGet("searchByLocation")]
         public async Task<List<PropertyReturnModel>> SearchByLocation(
         [FromQuery] string location,
-        [FromQuery] double distanceInMeters = 5000)
+        [FromQuery] double distanceInMeters = 15000)
         {
             List<PropertyReturnModel> redisAnswer =await _propertyService.checkCache(location);  // we were here, check the cache making a function returning properties or null !
             //get cords
