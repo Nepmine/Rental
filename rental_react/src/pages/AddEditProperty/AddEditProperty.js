@@ -58,7 +58,7 @@ const AddEditProperty = ({ user }) => {
 
   const loadProperty = async (propertyId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/PropertyController/getPropertyById?propertyId=${propertyId}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/Property/getPropertyById?propertyId=${propertyId}`);
       if (response.ok) {
         const property = await response.json();
         setFormData({

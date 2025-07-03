@@ -27,9 +27,9 @@ const HomePage = ({ user, userType, onLogout }) => {
       } else {
         // For latent users, get properties by location
         if (location) {
-          endpoint = `property/PropertyController/searchByLocation?location=${location}`;
+          endpoint = `property/Property/searchByLocation?location=${location}`;
         } else {
-          endpoint = 'property/PropertyController/getAllProperties';
+          endpoint = 'property/Property/getAllProperties';
         }
       }
 
