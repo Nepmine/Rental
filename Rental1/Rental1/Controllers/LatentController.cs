@@ -30,9 +30,9 @@ namespace Rental1.Controllers
         }
 
         [HttpPost("LatentLogin")]
-        public async Task<string> LatentLogin(string email, string password)
+        public async Task<string> LatentLogin(loginDataModel loginModel)
         {
-            return await _latentService.LatentLogin(email, password);
+            return await _latentService.LatentLogin(loginModel.email, loginModel.password);
         }
 
         [HttpPost("AddFavourate")]
