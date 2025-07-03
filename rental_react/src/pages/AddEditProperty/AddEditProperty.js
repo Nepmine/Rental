@@ -113,7 +113,7 @@ const AddEditProperty = ({ user }) => {
       let response;
       if (isEdit) {
         propertyData.id = id;
-        response = await fetch('${process.env.REACT_APP_BACKEND_URL}/property/Property/UpdateProperty', {
+        response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/Property/UpdateProperty`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

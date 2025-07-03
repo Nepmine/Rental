@@ -22,7 +22,7 @@ const Profile = ({ user, userType }) => {
     try {
       const endpoint = userType === 'owner' 
         ? `owner/Profile?id=${user.id}`
-        : `latent/LatentController/Profile?id=${user.id}`;
+        : `latent/Latent/Profile?id=${user.id}`;
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`);
       if (response.ok) {
@@ -54,7 +54,7 @@ const Profile = ({ user, userType }) => {
       // Note: You'll need to implement update profile endpoints in your backend
       const endpoint = userType === 'owner' 
         ? 'owner/UpdateProfile'
-        : 'latent/LatentController/UpdateProfile';
+        : 'latent/Latent/UpdateProfile';
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`, {
         method: 'PUT',
