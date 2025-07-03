@@ -70,7 +70,8 @@ namespace Rental1.Services
                     return "Error, Email or password Invalid !";
                 }
 
-                return "Logged in Successfully !";
+
+                return latent.Id;
             }
             catch (Exception ex)
             {

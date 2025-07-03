@@ -30,12 +30,19 @@ const Registration = () => {
     setSuccess('');
 
     try {
-      const response = await fetch(`http://localhost:5139/latent/Latent/latentRegister`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/latent/Latent/latentRegister`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: 'Try',
+          email: 'try@gmail.com',
+          password: 'try',
+          mobile: '1234567890',
+          userType: 'latent',
+          description: 'lorem23jdfhjdjd jfjjjjjjjjjjjjj jjjjjjjjjjjjjj'
+        }),
       });
 
       if (response.ok) {

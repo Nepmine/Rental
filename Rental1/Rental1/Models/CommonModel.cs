@@ -14,4 +14,11 @@ namespace Rental1.Models
         public string? Mobile { get; set; }
 
     }
+
+    public class loginDataModel
+    {
+        public string email { get; set; }
+
+        public string password { get; set; }
+    }
 }

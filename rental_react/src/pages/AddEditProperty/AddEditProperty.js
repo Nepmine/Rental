@@ -30,7 +30,7 @@ const AddEditProperty = ({ user }) => {
 
   const loadProperty = async (propertyId) => {
     try {
-      const response = await fetch(`${process.env.backendUrl}/property/PropertyController/getPropertyById?propertyId=${propertyId}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/PropertyController/getPropertyById?propertyId=${propertyId}`);
       if (response.ok) {
         const property = await response.json();
         setFormData({
@@ -113,7 +113,7 @@ const AddEditProperty = ({ user }) => {
       let response;
       if (isEdit) {
         propertyData.id = id;
-        response = await fetch('${process.env.backendUrl}/property/PropertyController/UpdateProperty', {
+        response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/Property/UpdateProperty`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const AddEditProperty = ({ user }) => {
           body: JSON.stringify(propertyData),
         });
       } else {
-        response = await fetch('${process.env.backendUrl}/property/PropertyController/addProperty', {
+        response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/Property/addProperty`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

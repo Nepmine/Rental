@@ -14,7 +14,7 @@ const PropertyDetails = ({ user, userType }) => {
 
   const loadProperty = async () => {
     try {
-      const response = await fetch(`${process.env.backendUrl}/property/PropertyController/getPropertyById?propertyId=${id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/PropertyController/getPropertyById?propertyId=${id}`);
       if (response.ok) {
         const data = await response.json();
         setProperty(data);
@@ -28,7 +28,7 @@ const PropertyDetails = ({ user, userType }) => {
 
   const handleAddToFavorites = async () => {
     try {
-      const response = await fetch('${process.env.backendUrl}/latent/LatentController/AddFavourate', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/latent/Latent/AddFavourate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
