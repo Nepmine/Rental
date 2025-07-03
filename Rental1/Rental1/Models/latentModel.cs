@@ -27,4 +27,11 @@ namespace Rental1.Models
 
         public List<String>? Favourites { get; set; }
     }
+
+    public class AddFavouriteRequest
+    {
+        public string? PropertyId { get; set; }
+        public string? LatentId { get; set; }
+    }
+
 }

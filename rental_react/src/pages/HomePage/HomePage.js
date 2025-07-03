@@ -25,13 +25,13 @@ const HomePage = ({ user, userType, onLogout }) => {
       } else {
         // For latent users, get properties by location
         if (location) {
-          endpoint = `property/PropertyController/searchByLocation?location=${location}`;
+          endpoint = `property/Property/searchByLocation?location=${location}`;
         } else {
-          endpoint = 'property/PropertyController/getAllProperties';
+          endpoint = 'property/Property/getAllProperties';
         }
       }
 
-      const response = await fetch(`${process.env.backendUrl}/${endpoint}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`);
       if (response.ok) {
         const data = await response.json();
         setProperties(data);
@@ -56,7 +56,7 @@ const HomePage = ({ user, userType, onLogout }) => {
 
   const handleRequestSubmit = async (requestData) => {
     try {
-      const response = await fetch('${process.env.backendUrl}/latent/LatentController/RequestForProperty', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/latent/Latent/RequestForProperty`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

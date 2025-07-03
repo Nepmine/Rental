@@ -24,7 +24,7 @@ const Profile = ({ user, userType }) => {
         ? `owner/Profile?id=${user.id}`
         : `latent/LatentController/Profile?id=${user.id}`;
       
-      const response = await fetch(`${process.env.backendUrl}/${endpoint}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`);
       if (response.ok) {
         const data = await response.json();
         setProfile(data);
@@ -56,7 +56,7 @@ const Profile = ({ user, userType }) => {
         ? 'owner/UpdateProfile'
         : 'latent/LatentController/UpdateProfile';
       
-      const response = await fetch(`${process.env.backendUrl}/${endpoint}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
