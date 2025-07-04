@@ -496,4 +496,5 @@ const AddEditProperty = ({ user }) => {
   );
 };
 
+
 export default AddEditProperty;
