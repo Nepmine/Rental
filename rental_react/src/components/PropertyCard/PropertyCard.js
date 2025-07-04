@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import './PropertyCard.css';
 
 const PropertyCard = ({ property, userType, onRequestProperty }) => {
+  console.log("Siyali ,,,,,,,,,,,,,",userType, property.id);
+  
   const handleRequestClick = (e) => {
     e.preventDefault();
     onRequestProperty(property);
@@ -33,8 +35,7 @@ const PropertyCard = ({ property, userType, onRequestProperty }) => {
         
         <div className="property-stats">
           <span className="likes">❤️ {property.likes}</span>
-          <span className={`status ${property.status.toLowerCase()}`}>
-            {property.status}
+          <span className={`status ${property.status.toLowerCase()}`}>{property.status}
           </span>
         </div>
         
@@ -47,8 +48,8 @@ const PropertyCard = ({ property, userType, onRequestProperty }) => {
               Request
             </button>
           )}
-          {userType === 'owner' && (
-            <Link to={`/edit-property/${property.id}`} className="edit-btn">
+          {userType == 'owner' && (
+            <Link to={`/edit-property/${property.id}`} className="details-btn">
               Edit
             </Link>
           )}
