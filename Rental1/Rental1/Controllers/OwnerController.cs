@@ -6,30 +6,55 @@ using Rental1.Services;
 namespace Rental1.Controllers
 {
     [ApiController]
-    [Route("owner/[controller]")]
+    [Route("owner/")]
     public class OwnerController : Controller
     {
             private readonly OwnerService _OwnerService;
-
-
         public OwnerController(OwnerService ownerService)
         {
             _OwnerService = ownerService;
         }
 
-        [HttpGet]
-        public async Task<List<OwnerModel>> allOwners()
+        //     ---------------------   ALL API's   -----------------------------
+
+        [HttpGet("Profile")]
+        public async Task<ProfileReturnDTO> getProfile(string id)
         {
-            return await _OwnerService.getAllOwners();
+            return await _OwnerService.getProfile(id);
         }
 
-        //public async Task<List<latentModel>> GetAll() => await _latentService.GetAllEntries();
-
-        [HttpPost]
-        public string Index(OwnerModel newOwner)
+        [HttpPost("OwnerRegister")]
+        public async Task<string> OwnerRegister(OwnerModel newOwner)
         {
-            _OwnerService.CreateOwner(newOwner);
-            return "Hello there !";
+            return await _OwnerService.OwnerRegister(newOwner);
+        }
+
+        [HttpPost("OwnerLogin")]
+        public async Task<string> OwnerLogin(loginDataModel loginData)
+        {
+            return await _OwnerService.OwnerLogin(loginData.email, loginData.password);
+        }
+
+
+        [HttpGet("GetAllRequests")]
+        public async Task<List<PropertyModel>> GetAllRequests(string ownerId)
+        {
+            return await _OwnerService.GetAllRequests(ownerId);
+
+        }
+
+        [HttpGet("myAllProperties")]
+        public async Task<List<PropertyModel>> myAllProperties(string ownerId)
+        {
+            return await _OwnerService.myAllProperties(ownerId);
+
+        }
+
+        [HttpPut("UpdateProfile")]
+        public async Task<string> UpdateProfile(UpdateProfileModel profile)
+        {
+            await _OwnerService.UpdateProfile(profile);
+            return "Profile Updated !";
         }
     }
 }

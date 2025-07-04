@@ -1,0 +1,148 @@
+/* components/RequestList/RequestList.css */
+.request-list {
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.request-list h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.no-requests {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  padding: 3rem;
+  background: white;
+  border-radius: 10px;
+  border: 2px dashed #ddd;
+  margin: 1rem 0;
+}
+
+.requests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.request-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.request-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.request-card h3 {
+  color: #333;
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.request-address {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.request-address::before {
+  content: "📍";
+  font-size: 0.8rem;
+}
+
+.request-description {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  border-left: 3px solid #e9ecef;
+}
+
+.request-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status.approved {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status.rejected {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.status.under-review {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .request-list {
+    padding: 1rem;
+  }
+  
+  .requests-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .request-card {
+    padding: 1rem;
+  }
+  
+  .request-list h2 {
+    font-size: 1.5rem;
+  }
+}
