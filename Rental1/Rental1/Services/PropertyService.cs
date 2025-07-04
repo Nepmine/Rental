@@ -54,9 +54,10 @@ namespace Rental1.Services
         public async Task<List<PropertyModel>> GetAllEntries() =>
         await _propertyCollection.Find(_ => true).ToListAsync();
 
-        public async Task CreateEntry(PropertyModel property)
+        public async Task<string> CreateProperty(PropertyModel property)
         {
             await _propertyCollection.InsertOneAsync(property);
+            return property.Id;
         }
 
 
@@ -108,6 +109,7 @@ namespace Rental1.Services
             var filter = Builders<PropertyModel>.Filter.NearSphere(
                 x => x.Location,
                 point,
+
                 maxDistance: distanceInMeters
             );
 

@@ -40,7 +40,9 @@ namespace Rental1.Services
             {
                 Name = Latent.Name,
                 Email = Latent.Email,
-                Mobile = Latent.Mobile
+                Mobile = Latent.Mobile,
+                Requests = Latent.Requests,
+                Favourites = Latent.Favourites
             };
         }
 
@@ -180,7 +182,22 @@ namespace Rental1.Services
         }
 
 
+        public async Task UpdateProfile(UpdateProfileModel profile)
+        {
+            var latent = await _latentCollection.Find(x => x.Email == profile.Email).FirstOrDefaultAsync();
 
+            if (latent == null)
+            {
+                throw new KeyNotFoundException("Latent not found");
+            }
+
+            latent.Name = profile.Name;
+            latent.Email=profile.Email;
+            latent.Mobile = profile.Mobile;
+            latent.Description = profile.Description;
+
+            await _latentCollection.ReplaceOneAsync(x => x.Id == latent.Id, latent);
+        }
 
 
     }

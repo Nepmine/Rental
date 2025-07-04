@@ -61,5 +61,12 @@ namespace Rental1.Controllers
        
         }
 
+        [HttpPut("UpdateProfile")]
+        public async Task<string> UpdateProfile([FromBody] UpdateProfileModel profile)
+        {
+            await _latentService.UpdateProfile(profile);
+            return "Profile Updated !";
+        }
+
     }
 }

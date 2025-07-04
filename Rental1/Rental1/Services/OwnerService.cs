@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using Pipelines.Sockets.Unofficial.Buffers;
 using Rental1.Models;
+using System.Data;
 
 namespace Rental1.Services
 {
@@ -19,7 +21,7 @@ namespace Rental1.Services
 
         public async Task<ProfileReturnDTO> getProfile(string id)
         {
-        OwnerModel Owner=await _OwnerCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            OwnerModel Owner = await _OwnerCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
             if (Owner == null)
             {
                 throw new KeyNotFoundException("Owner not found");
@@ -29,11 +31,13 @@ namespace Rental1.Services
             {
                 Name = Owner.Name,
                 Email = Owner.Email,
-                Mobile = Owner.Mobile
+                Mobile = Owner.Mobile,
+                Requests = Owner.Requests,
+                Favourites = ["hi","gfjk"]
             };
         }
 
-        
+
         public async Task<string> OwnerRegister(OwnerModel newOwner)
         {
             try
@@ -54,12 +58,12 @@ namespace Rental1.Services
             try
             {
                 // convert the password to hash before checking ..
-                OwnerModel Owner= await _OwnerCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
-                if (Owner == null|| Owner.Password != password)
+                OwnerModel Owner = await _OwnerCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
+                if (Owner == null || Owner.Password != password)
                 {
                     return "Error, Email or password Invalid !";
                 }
-                
+
                 return "Logged in Successfully !";
             }
             catch (Exception ex)
@@ -140,9 +144,9 @@ namespace Rental1.Services
 
         }
 
-            // fetch request list
-            // extract propertyId from each
-            // extract property details from that propertyid calling AllFavourateProperties in propertyService
+        // fetch request list
+        // extract propertyId from each
+        // extract property details from that propertyid calling AllFavourateProperties in propertyService
         public async Task<List<PropertyModel>> myAllProperties(string ownerId)
         {
 
@@ -160,6 +164,43 @@ namespace Rental1.Services
             return await _propertyService.AllFavourateProperties(Owner.Properties);
 
         }
+
+        public async Task SavePropertyIdToOwner(string ownerId, string propertyId)
+        {
+            OwnerModel owner = await _OwnerCollection.Find(x => x.Id == ownerId).FirstOrDefaultAsync();
+            if (owner == null)
+            {
+                throw new KeyNotFoundException("Incorrect Owner ID");
+            }
+            if (owner.Properties == null)
+            {
+                List<string> Properties = new List<string>();
+                Properties.Add(propertyId);
+                owner.Properties=Properties;
+            }
+            else owner.Properties.Add(propertyId);
+
+            await _OwnerCollection.ReplaceOneAsync(x => x.Id == ownerId, owner);
+
+        }
+
+        public async Task UpdateProfile(UpdateProfileModel profile)
+        {
+            var owner= await _OwnerCollection.Find(x => x.Email == profile.Email).FirstOrDefaultAsync();
+
+            if (owner == null)
+            {
+                throw new KeyNotFoundException("Owner not found");
+            }
+
+            owner.Name = profile.Name;
+            owner.Mobile = profile.Mobile;
+            owner.Email=profile.Email;
+            owner.Description = profile.Description;
+
+            await _OwnerCollection.ReplaceOneAsync(x => x.Id == owner.Id, owner);
+        }
+
     }
 }
 

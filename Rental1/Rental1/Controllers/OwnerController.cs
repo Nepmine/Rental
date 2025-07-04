@@ -49,5 +49,12 @@ namespace Rental1.Controllers
             return await _OwnerService.myAllProperties(ownerId);
 
         }
+
+        [HttpPut("UpdateProfile")]
+        public async Task<string> UpdateProfile(UpdateProfileModel profile)
+        {
+            await _OwnerService.UpdateProfile(profile);
+            return "Profile Updated !";
+        }
     }
 }
