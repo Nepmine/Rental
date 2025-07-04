@@ -12,6 +12,8 @@ const HomePage = ({ user, userType, onLogout }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [location, setLocation] = useState('');
   const [showRequests, setShowRequests] = useState(false);
+  const [showFavourites, setShowFavourites] = useState(false);
+  const [currentView, setCurrentView] = useState('properties'); // 'properties', 'requests', 'favourites'
 
   useEffect(() => {
     loadProperties();
@@ -25,9 +27,9 @@ const HomePage = ({ user, userType, onLogout }) => {
       } else {
         // For latent users, get properties by location
         if (location) {
-          endpoint = `property/Property/searchByLocation?location=${location}`;
+          endpoint = `property/PropertyController/searchByLocation?location=${location}`;
         } else {
-          endpoint = 'property/Property/getAllProperties';
+          endpoint = 'property/PropertyController/getAllProperties';
         }
       }
 
@@ -43,8 +45,45 @@ const HomePage = ({ user, userType, onLogout }) => {
     }
   };
 
+  const loadMyRequests = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/latent/Latent/GetAllRequests?latentId=${user.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProperties(data);
+      }
+    } catch (error) {
+      console.error('Failed to load requests:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMyFavourites = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/latent/Latent/AllFavourates?latentId=${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({ latentId: user.id }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setProperties(data);
+      }
+    } catch (error) {
+      console.error('Failed to load favourites:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLocationSearch = () => {
     if (location.trim()) {
+      setCurrentView('properties');
       loadProperties();
     }
   };
@@ -78,6 +117,38 @@ const HomePage = ({ user, userType, onLogout }) => {
     }
   };
 
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+    setShowRequests(false);
+    setShowFavourites(false);
+    
+    switch (view) {
+      case 'properties':
+        loadProperties();
+        break;
+      case 'favourites':
+        loadMyFavourites();
+        break;
+      default:
+        loadProperties();
+    }
+  };
+
+  const getPageTitle = () => {
+    if (userType === 'owner') {
+      return showRequests ? 'Property Requests' : 'My Properties';
+    } else {
+      switch (currentView) {
+        case 'requests':
+          return 'My Requests';
+        case 'favourites':
+          return 'My Favourites';
+        default:
+          return 'Available Properties';
+      }
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -94,12 +165,34 @@ const HomePage = ({ user, userType, onLogout }) => {
               {showRequests ? 'Hide Requests' : 'View Requests'}
             </button>
           )}
+          {userType === 'latent' && (
+            <>
+              <button 
+                onClick={() => handleViewChange('properties')}
+                className={currentView === 'properties' ? 'active' : ''}
+              >
+                All Properties
+              </button>
+              <button 
+                onClick={() => handleViewChange('requests')}
+                className={currentView === 'requests' ? 'active' : ''}
+              >
+                My Requests
+              </button>
+              <button 
+                onClick={() => handleViewChange('favourites')}
+                className={currentView === 'favourites' ? 'active' : ''}
+              >
+                My Favourites
+              </button>
+            </>
+          )}
           <button onClick={onLogout}>Logout</button>
         </nav>
       </header>
 
       <main className="home-content">
-        {userType === 'latent' && (
+        {userType === 'latent' && currentView === 'properties' && (
           <div className="search-section">
             <h2>Find Properties Near You</h2>
             <div className="search-bar">
@@ -118,10 +211,22 @@ const HomePage = ({ user, userType, onLogout }) => {
           <RequestList userId={user.id} userType={userType} />
         )}
 
+        {userType === 'latent' && currentView === 'requests' && (
+          <RequestList userId={user.id} userType={userType} />
+        )}
+
         <div className="properties-section">
-          <h2>
-            {userType === 'owner' ? 'My Properties' : 'Available Properties'}
-          </h2>
+          <h2>{getPageTitle()}</h2>
+          
+          {currentView === 'favourites' && properties.length === 0 && (
+            <div className="empty-state">
+              <p>You haven't added any properties to your favourites yet.</p>
+              <button onClick={() => handleViewChange('properties')} className="browse-btn">
+                Browse Properties
+              </button>
+            </div>
+          )}
+
           <div className="properties-grid">
             {properties.map((property) => (
               <PropertyCard
@@ -129,6 +234,7 @@ const HomePage = ({ user, userType, onLogout }) => {
                 property={property}
                 userType={userType}
                 onRequestProperty={handleRequestProperty}
+                currentView={currentView}
               />
             ))}
           </div>

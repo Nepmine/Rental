@@ -26,7 +26,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const endpoint = formData.userType === 'owner' ? 'owner/OwnerLogin' : 'latent/Latent/LatentLogin';
-      const response = await fetch(`http://localhost:5139/latent/Latent/LatentLogin`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

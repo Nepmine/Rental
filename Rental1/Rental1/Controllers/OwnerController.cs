@@ -30,9 +30,9 @@ namespace Rental1.Controllers
         }
 
         [HttpPost("OwnerLogin")]
-        public async Task<string> OwnerLogin(string email, string password)
+        public async Task<string> OwnerLogin(loginDataModel loginData)
         {
-            return await _OwnerService.OwnerLogin(email, password);
+            return await _OwnerService.OwnerLogin(loginData.email, loginData.password);
         }
 
 
