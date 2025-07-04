@@ -17,7 +17,9 @@ namespace Rental1.Models
         [Required]
         public string Password { get; set; } = null!;
 
-        public string? Mobile { get; set; } 
+        public string? Mobile { get; set; }
+
+        public string? Description { get; set; }
 
         public List<string>? Properties { get; set; }
 

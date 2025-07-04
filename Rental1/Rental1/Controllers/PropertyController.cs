@@ -12,10 +12,13 @@ namespace Rental1.Controllers
     public class PropertyController : Controller
     {
         private readonly PropertyService _propertyService;
+        private readonly OwnerService _ownerService;
 
-        public PropertyController(PropertyService propertyService)
+
+        public PropertyController(PropertyService propertyService, OwnerService ownerService)
         {
             _propertyService = propertyService;
+            _ownerService = ownerService;
         }
 
         [HttpGet("getPropertyById")]
@@ -34,7 +37,10 @@ namespace Rental1.Controllers
                 new GeoJson2DGeographicCoordinates((double)coords.Lon, (double)coords.Lat)
             );
 
-            await _propertyService.CreateEntry(input);
+            string propertyId = await _propertyService.CreateProperty(input);
+
+            // passed propertyId and ownerId
+            await _ownerService.SavePropertyIdToOwner(input.OwnerId, propertyId);
 
             return "Property added successfully!";
         }

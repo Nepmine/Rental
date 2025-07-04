@@ -25,8 +25,10 @@ const Profile = ({ user, userType }) => {
         : `latent/Latent/Profile?id=${user.id}`;
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${endpoint}`);
+      console.log("Sayali profile:", response)
       if (response.ok) {
         const data = await response.json();
+        console.log("Sayali profile:", data)
         setProfile(data);
         setFormData({
           name: data.name || '',

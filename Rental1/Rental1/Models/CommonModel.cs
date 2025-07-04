@@ -13,6 +13,24 @@ namespace Rental1.Models
 
         public string? Mobile { get; set; }
 
+        public string? Description { get; set; }
+
+        public List<RequestModel>? Requests { get; set; } = new();
+
+        public List<String>? Favourites { get; set; }
+
+
+    }
+
+    public class UpdateProfileModel
+    {
+        public string? Name { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? Mobile { get; set; }
+
+        public string? Description { get; set; }
     }
 
     public class loginDataModel
@@ -20,5 +38,6 @@ namespace Rental1.Models
         public string email { get; set; }
 
         public string password { get; set; }
+
     }
 }

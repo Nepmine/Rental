@@ -14,7 +14,7 @@ const PropertyDetails = ({ user, userType }) => {
 
   const loadProperty = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/PropertyController/getPropertyById?propertyId=${id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/property/Property/getPropertyById?propertyId=${id}`);
       if (response.ok) {
         const data = await response.json();
         setProperty(data);
@@ -25,6 +25,7 @@ const PropertyDetails = ({ user, userType }) => {
       setLoading(false);
     }
   };
+
 
   const handleAddToFavorites = async () => {
     try {

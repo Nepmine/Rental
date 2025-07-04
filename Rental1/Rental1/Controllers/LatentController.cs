@@ -36,9 +36,9 @@ namespace Rental1.Controllers
         }
 
         [HttpPost("AddFavourate")]
-        public async Task<string> AddFavourate(string propertyId, string latentId)
+        public async Task<string> AddFavourate(AddFavouriteRequest request)
         {
-            return await _latentService.AddFavourate(propertyId, latentId);
+            return await _latentService.AddFavourate(request.PropertyId, request.LatentId);
         }
 
         [HttpPost("AllFavourates")]
@@ -59,6 +59,13 @@ namespace Rental1.Controllers
         {
             return await _latentService.GetAllRequests(latentId);
        
+        }
+
+        [HttpPut("UpdateProfile")]
+        public async Task<string> UpdateProfile([FromBody] UpdateProfileModel profile)
+        {
+            await _latentService.UpdateProfile(profile);
+            return "Profile Updated !";
         }
 
     }
